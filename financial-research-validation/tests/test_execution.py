@@ -37,6 +37,68 @@ def test_timeout_is_not_a_rejection_and_cannot_be_resubmitted():
     assert match(case) and case.state == State.FILLED
 
 
+def test_duplicate_response_is_idempotent_even_after_later_partial_fill():
+    case = ExecutionCase("demo", "10")
+    case.begin_submit()
+    case.timeout()
+    assert case.acknowledge("r1", "remote-1")
+    case.record_fill("f1", "3", "20")
+    assert not case.acknowledge("r1", "remote-1")
+    assert case.state == State.PARTIAL and case.filled == 3
+
+
+def test_conflicting_response_identity_quarantines_the_case():
+    case = opened()
+    with pytest.raises(ValueError, match="Response identity"):
+        case.acknowledge("ack", "another-order")
+    assert "response_identity_conflict" in case.halts
+
+
+def test_response_identity_survives_restart_without_resetting_state():
+    case = opened()
+    case.record_fill("f1", "3", "20")
+    case = ExecutionCase.restore(json.loads(json.dumps(case.snapshot())))
+    assert not case.acknowledge() and case.state == State.PARTIAL
+
+
+def test_acquisition_cost_distinguishes_principal_from_execution_fees():
+    case = opened()
+    case.record_fill("f1", "3", "20", ".30")
+    case.record_fill("f2", "7", "21", ".70")
+    assert case.principal == 207 and case.fees == 1 and case.total_acquisition_cost == 208
+
+
+def test_an_invalid_new_observation_closes_a_previously_clear_local_gate():
+    case = opened()
+    case.record_fill("f1", "10", "20")
+    assert match(case) and case.new_entries_allowed
+    with pytest.raises(ValueError):
+        case.reconcile(remote_state="FILLED", remote_position="NaN", remote_filled="10")
+    assert not case.new_entries_allowed and "invalid_observation" in case.gate_reasons
+    assert match(case) and case.new_entries_allowed
+
+
+def test_a_string_is_not_an_explicit_protective_stop_confirmation():
+    case = opened()
+    case.record_fill("f1", "10", "20")
+    assert match(case) and case.new_entries_allowed
+    with pytest.raises(ValueError):
+        case.reconcile(remote_state="FILLED", remote_position="10", remote_filled="10",
+                       stop_confirmed="false", stop_quantity="10")
+    assert not case.new_entries_allowed and "invalid_observation" in case.gate_reasons
+
+
+def test_sequential_demo_explains_resolved_and_quarantined_gates():
+    from execution_demo import run
+    result = run()
+    assert result["resolved_case"]["case_entry_gate_clear"]
+    assert not result["quarantined_case"]["case_entry_gate_clear"]
+    events = result["resolved_case"]["events"]
+    assert all("case_entry_gate_clear" in event and "gate_reasons" in event for event in events)
+    assert {"response_uncertain", "duplicate_response_ignored", "duplicate_fill_ignored"} <= {
+        event["event"] for event in events}
+
+
 def test_identical_fill_is_idempotent_and_conflicting_fill_blocks():
     case = opened()
     case.record_fill("f1", "3", "20")

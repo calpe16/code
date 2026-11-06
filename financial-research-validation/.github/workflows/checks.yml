@@ -15,3 +15,4 @@ jobs:
       - run: uv run pytest -q
       - run: uv run python demo.py
       - run: uv run python execution_demo.py
+      - run: uv run python backtest_demo.py --check

@@ -1,55 +1,202 @@
 {
   "data": "Synthetic demo data",
-  "unprotected_halts": [
-    "protection_unconfirmed"
-  ],
-  "final_state": "FILLED",
-  "position": "10",
-  "entry_cost": "208.00",
-  "new_entries_allowed": true,
-  "audit": [
-    {
-      "event": "submission_started",
-      "state": "SENDING",
-      "client_id": "DEMO-ORDER"
-    },
-    {
-      "event": "response_uncertain",
-      "state": "UNKNOWN",
-      "action": "Query the existing identity before retrying"
-    },
-    {
-      "event": "fill_recorded",
-      "state": "UNKNOWN",
-      "fill_id": "DEMO-FILL-1",
-      "filled": "3"
-    },
-    {
-      "event": "duplicate_fill_ignored",
-      "state": "UNKNOWN",
-      "fill_id": "DEMO-FILL-1"
-    },
-    {
-      "event": "reconciliation",
-      "state": "PARTIAL",
-      "issues": [
-        "protection_unconfirmed"
-      ],
-      "position": "3",
-      "stop_quantity": "0"
-    },
-    {
-      "event": "fill_recorded",
-      "state": "FILLED",
-      "fill_id": "DEMO-FILL-2",
-      "filled": "10"
-    },
-    {
-      "event": "reconciliation",
-      "state": "FILLED",
-      "issues": [],
-      "position": "10",
-      "stop_quantity": "10"
-    }
-  ]
+  "scope": "Single-order case gate, not portfolio exposure approval",
+  "resolved_case": {
+    "state": "FILLED",
+    "position": "10",
+    "principal_eur": "207",
+    "fees_eur": "1.00",
+    "total_acquisition_cost_eur": "208.00",
+    "case_entry_gate_clear": true,
+    "events": [
+      {
+        "event": "submission_started",
+        "state": "SENDING",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "order_response_unresolved"
+        ],
+        "client_id": "DEMO-ORDER"
+      },
+      {
+        "event": "response_uncertain",
+        "state": "UNKNOWN",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "order_response_unresolved"
+        ],
+        "action": "Query the existing identity before retrying"
+      },
+      {
+        "event": "checkpoint_restored",
+        "state": "UNKNOWN",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "order_response_unresolved"
+        ]
+      },
+      {
+        "event": "submission_acknowledged",
+        "state": "OPEN",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "open_order_reservation"
+        ]
+      },
+      {
+        "event": "duplicate_response_ignored",
+        "state": "OPEN",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "open_order_reservation"
+        ],
+        "response_id": "RESPONSE-1"
+      },
+      {
+        "event": "fill_recorded",
+        "state": "PARTIAL",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "open_order_reservation"
+        ],
+        "fill_id": "FILL-1",
+        "filled": "3"
+      },
+      {
+        "event": "duplicate_fill_ignored",
+        "state": "PARTIAL",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "open_order_reservation"
+        ],
+        "fill_id": "FILL-1"
+      },
+      {
+        "event": "reconciliation",
+        "state": "PARTIAL",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "open_order_reservation",
+          "position_mismatch",
+          "protection_unconfirmed"
+        ],
+        "issues": [
+          "position_mismatch",
+          "protection_unconfirmed"
+        ],
+        "position": "4",
+        "stop_quantity": "1"
+      },
+      {
+        "event": "reconciliation",
+        "state": "PARTIAL",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "open_order_reservation"
+        ],
+        "issues": [],
+        "position": "3",
+        "stop_quantity": "3"
+      },
+      {
+        "event": "reconciliation",
+        "state": "CANCELLED",
+        "case_entry_gate_clear": true,
+        "gate_reasons": [],
+        "issues": [],
+        "position": "3",
+        "stop_quantity": "3"
+      },
+      {
+        "event": "fill_recorded",
+        "state": "CANCELLED",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required"
+        ],
+        "fill_id": "FILL-2",
+        "filled": "10"
+      },
+      {
+        "event": "reconciliation",
+        "state": "FILLED",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "protection_unconfirmed"
+        ],
+        "issues": [
+          "protection_unconfirmed"
+        ],
+        "position": "10",
+        "stop_quantity": "3"
+      },
+      {
+        "event": "reconciliation",
+        "state": "FILLED",
+        "case_entry_gate_clear": true,
+        "gate_reasons": [],
+        "issues": [],
+        "position": "10",
+        "stop_quantity": "10"
+      }
+    ]
+  },
+  "quarantined_case": {
+    "case_entry_gate_clear": false,
+    "reasons": [
+      "fill_identity_conflict"
+    ],
+    "events": [
+      {
+        "event": "submission_started",
+        "state": "SENDING",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "order_response_unresolved"
+        ],
+        "client_id": "CONFLICT-CASE"
+      },
+      {
+        "event": "submission_acknowledged",
+        "state": "OPEN",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "open_order_reservation"
+        ]
+      },
+      {
+        "event": "fill_recorded",
+        "state": "PARTIAL",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fresh_reconciliation_required",
+          "open_order_reservation"
+        ],
+        "fill_id": "FILL-CONFLICT",
+        "filled": "3"
+      },
+      {
+        "event": "reconciliation",
+        "state": "CANCELLED",
+        "case_entry_gate_clear": false,
+        "gate_reasons": [
+          "fill_identity_conflict"
+        ],
+        "issues": [],
+        "position": "3",
+        "stop_quantity": "3"
+      }
+    ]
+  }
 }

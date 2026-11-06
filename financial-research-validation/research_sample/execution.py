@@ -44,6 +44,7 @@ class ExecutionCase:
     reconciliation_issues: set[str] = field(default_factory=set)
     reconciled: bool = True
     audit: list[dict] = field(default_factory=list)
+    responses: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self):
         if not self.client_id:
@@ -55,8 +56,21 @@ class ExecutionCase:
         return sum((fill.quantity for fill in self.fills.values()), Decimal(0))
 
     @property
+    def principal(self):
+        return sum((fill.quantity * fill.price for fill in self.fills.values()), Decimal(0))
+
+    @property
+    def fees(self):
+        return sum((fill.fee for fill in self.fills.values()), Decimal(0))
+
+    @property
+    def total_acquisition_cost(self):
+        return self.principal + self.fees
+
+    @property
     def entry_cost(self):
-        return sum((fill.quantity * fill.price + fill.fee for fill in self.fills.values()), Decimal(0))
+        """Compatibility alias for total acquisition cost, including principal."""
+        return self.total_acquisition_cost
 
     @property
     def halts(self):
@@ -67,11 +81,22 @@ class ExecutionCase:
 
     @property
     def new_entries_allowed(self):
-        return (self.reconciled and not self.halts
-                and self.state not in {State.SENDING, State.UNKNOWN, State.OPEN, State.PARTIAL})
+        """Local gate for this one-order case, not a portfolio exposure approval."""
+        return not self.gate_reasons
+
+    @property
+    def gate_reasons(self):
+        reasons = self.halts.copy()
+        if not self.reconciled:
+            reasons.add("fresh_reconciliation_required")
+        if self.state in {State.OPEN, State.PARTIAL}:
+            reasons.add("open_order_reservation")
+        return reasons
 
     def _event(self, event, **details):
-        self.audit.append({"event": event, "state": str(self.state), **details})
+        self.audit.append({"event": event, "state": str(self.state),
+                           "case_entry_gate_clear": self.new_entries_allowed,
+                           "gate_reasons": sorted(self.gate_reasons), **details})
 
     def begin_submit(self):
         if self.state != State.CREATED or not self.new_entries_allowed:
@@ -80,11 +105,23 @@ class ExecutionCase:
         self.reconciled = False
         self._event("submission_started", client_id=self.client_id)
 
-    def acknowledge(self):
-        if self.state != State.SENDING:
+    def acknowledge(self, response_id="ack", remote_order_id="SIMULATED"):
+        if not response_id or not remote_order_id:
+            raise ValueError("Response and remote order identities required")
+        if response_id in self.responses:
+            if self.responses[response_id] != remote_order_id:
+                self.persistent_halts.add("response_identity_conflict")
+                self.reconciled = False
+                self._event("response_identity_conflict", response_id=response_id)
+                raise ValueError("Response identity reused for another order")
+            self._event("duplicate_response_ignored", response_id=response_id)
+            return False
+        if self.state not in {State.SENDING, State.UNKNOWN}:
             raise ValueError("Only an in-flight submission can be acknowledged")
+        self.responses[response_id] = remote_order_id
         self.state = State.OPEN
         self._event("submission_acknowledged")
+        return True
 
     def timeout(self):
         if self.state != State.SENDING:
@@ -118,10 +155,18 @@ class ExecutionCase:
 
     def reconcile(self, *, remote_state, remote_position, remote_filled,
                   stop_confirmed=False, stop_quantity="0"):
-        remote = State(remote_state)
-        position = amount(remote_position)
-        cumulative = amount(remote_filled)
-        protected = amount(stop_quantity)
+        self.reconciled = False
+        try:
+            if not isinstance(stop_confirmed, bool):
+                raise ValueError("Protective-stop confirmation must be a boolean")
+            remote = State(remote_state)
+            position = amount(remote_position)
+            cumulative = amount(remote_filled)
+            protected = amount(stop_quantity)
+        except (ValueError, ArithmeticError) as error:
+            self.reconciliation_issues = {"invalid_observation"}
+            self._event("invalid_observation")
+            raise ValueError("Complete finite reconciliation observations required") from error
         if self.state == State.CREATED:
             raise ValueError("An unsent intent has no broker state to reconcile")
         if remote == State.REJECTED:
@@ -152,7 +197,7 @@ class ExecutionCase:
         return {"client_id": self.client_id, "quantity": str(self.quantity), "state": str(self.state),
                 "fills": [{k: str(v) for k, v in asdict(fill).items()} for fill in self.fills.values()],
                 "persistent_halts": sorted(self.persistent_halts), "issues": sorted(self.reconciliation_issues),
-                "reconciled": self.reconciled, "audit": self.audit}
+                "reconciled": self.reconciled, "audit": self.audit, "responses": self.responses.copy()}
 
     @classmethod
     def restore(cls, data):
@@ -169,4 +214,6 @@ class ExecutionCase:
         # Restoring a ledger is not a fresh observation of a remote account.
         case.reconciled = False
         case.audit = list(data["audit"])
+        case.responses = dict(data.get("responses", {}))
+        case._event("checkpoint_restored")
         return case

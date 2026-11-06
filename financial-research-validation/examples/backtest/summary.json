@@ -1,0 +1,202 @@
+{
+  "data": "Synthetic demo data",
+  "dataset_sha256": "664d2270daacf26a3e184126f8729a08c47fc316cc831d77eed022d2c3282bbf",
+  "end": "2024-06-28T08:00:00+00:00",
+  "scenarios": [
+    {
+      "benchmark": {
+        "completed_trades": 0,
+        "cumulative_return": "0.023788",
+        "ending_cash": "2012.40",
+        "entries": 1,
+        "fees": "0.00",
+        "fill_count": 1,
+        "final_equity": "10237.88",
+        "initial_equity": "10000",
+        "max_drawdown": "0.07596818879432341392437862510",
+        "net_result": "237.88",
+        "open_quantity": 76,
+        "slippage_cost": "0.00",
+        "spread_cost": "0.00",
+        "terminal_policy": "mark",
+        "total_execution_costs": "0.00",
+        "turnover": "0.79876"
+      },
+      "costs": {
+        "fee_bps": "0",
+        "name": "zero",
+        "slippage_bps": "0",
+        "spread_bps": "0"
+      },
+      "excess_return": "0.178306",
+      "scenario": "zero",
+      "strategy": {
+        "completed_trades": 3,
+        "cumulative_return": "0.202094",
+        "ending_cash": "2388.47",
+        "entries": 4,
+        "fees": "0.00",
+        "fill_count": 7,
+        "final_equity": "12020.94",
+        "initial_equity": "10000",
+        "max_drawdown": "0.02153270275922499212444176190",
+        "net_result": "2020.94",
+        "open_quantity": 89,
+        "slippage_cost": "0.00",
+        "spread_cost": "0.00",
+        "terminal_policy": "mark",
+        "total_execution_costs": "0.00",
+        "turnover": "6.144469"
+      }
+    },
+    {
+      "benchmark": {
+        "completed_trades": 0,
+        "cumulative_return": "0.022909124372",
+        "ending_cash": "2003.61124372",
+        "entries": 1,
+        "fees": "3.99619628",
+        "fill_count": 1,
+        "final_equity": "10229.09124372",
+        "initial_equity": "10000",
+        "max_drawdown": "0.07603478615178987864794478510",
+        "net_result": "229.09124372",
+        "open_quantity": 76,
+        "slippage_cost": "1.59752",
+        "spread_cost": "3.19504",
+        "terminal_policy": "mark",
+        "total_execution_costs": "8.78875628",
+        "turnover": "0.799239256"
+      },
+      "costs": {
+        "fee_bps": "5",
+        "name": "base",
+        "slippage_bps": "2",
+        "spread_bps": "8"
+      },
+      "excess_return": "0.1721142845321",
+      "scenario": "base",
+      "strategy": {
+        "completed_trades": 3,
+        "cumulative_return": "0.1950234089041",
+        "ending_cash": "2425.994089041",
+        "entries": 4,
+        "fees": "30.672096959",
+        "fill_count": 7,
+        "final_equity": "11950.234089041",
+        "initial_equity": "10000",
+        "max_drawdown": "0.02158476435389227727469751386",
+        "net_result": "1950.234089041",
+        "open_quantity": 88,
+        "slippage_cost": "12.267938",
+        "spread_cost": "24.535876",
+        "terminal_policy": "mark",
+        "total_execution_costs": "67.475910959",
+        "turnover": "6.1344193918"
+      }
+    },
+    {
+      "benchmark": {
+        "completed_trades": 0,
+        "cumulative_return": "0.019924327875",
+        "ending_cash": "2081.99327875",
+        "entries": 1,
+        "fees": "11.85922125",
+        "fill_count": 1,
+        "final_equity": "10199.24327875",
+        "initial_equity": "10000",
+        "max_drawdown": "0.075400672125",
+        "net_result": "199.24327875",
+        "open_quantity": 75,
+        "slippage_cost": "15.765",
+        "spread_cost": "7.8825",
+        "terminal_policy": "mark",
+        "total_execution_costs": "35.50672125",
+        "turnover": "0.79061475"
+      },
+      "costs": {
+        "fee_bps": "15",
+        "name": "stress",
+        "slippage_bps": "20",
+        "spread_bps": "20"
+      },
+      "excess_return": "0.151542678841",
+      "scenario": "stress",
+      "strategy": {
+        "completed_trades": 3,
+        "cumulative_return": "0.171467006716",
+        "ending_cash": "2298.66006716",
+        "entries": 4,
+        "fees": "90.62893284",
+        "fill_count": 7,
+        "final_equity": "11714.67006716",
+        "initial_equity": "10000",
+        "max_drawdown": "0.02534770063996066683206917713",
+        "net_result": "1714.67006716",
+        "open_quantity": 87,
+        "slippage_cost": "120.79400",
+        "spread_cost": "60.39700",
+        "terminal_policy": "mark",
+        "total_execution_costs": "271.81993284",
+        "turnover": "6.041928856"
+      }
+    },
+    {
+      "benchmark": {
+        "completed_trades": 0,
+        "cumulative_return": "0.01557594675",
+        "ending_cash": "2038.5094675",
+        "entries": 1,
+        "fees": "23.8130325",
+        "fill_count": 1,
+        "final_equity": "10155.7594675",
+        "initial_equity": "10000",
+        "max_drawdown": "0.07974905325",
+        "net_result": "155.7594675",
+        "open_quantity": 75,
+        "slippage_cost": "39.4125",
+        "spread_cost": "15.765",
+        "terminal_policy": "mark",
+        "total_execution_costs": "78.9905325",
+        "turnover": "0.79376775"
+      },
+      "costs": {
+        "fee_bps": "30",
+        "name": "high",
+        "slippage_bps": "50",
+        "spread_bps": "40"
+      },
+      "excess_return": "0.120487267524",
+      "scenario": "high",
+      "strategy": {
+        "completed_trades": 3,
+        "cumulative_return": "0.136063214274",
+        "ending_cash": "2269.31214274",
+        "entries": 4,
+        "fees": "178.49325726",
+        "fill_count": 7,
+        "final_equity": "11360.63214274",
+        "initial_equity": "10000",
+        "max_drawdown": "0.03398154426283104104654968911",
+        "net_result": "1360.63214274",
+        "open_quantity": 84,
+        "slippage_cost": "297.23900",
+        "spread_cost": "118.89560",
+        "terminal_policy": "mark",
+        "total_execution_costs": "594.62785726",
+        "turnover": "5.949775242"
+      }
+    }
+  ],
+  "settings": {
+    "bars": 180,
+    "cash_allocation": "0.80",
+    "decimal_precision": 28,
+    "fast": 5,
+    "initial_eur": "10000",
+    "seed": 31,
+    "slow": 12,
+    "terminal": "mark"
+  },
+  "start": "2024-01-01T00:00:00+00:00"
+}

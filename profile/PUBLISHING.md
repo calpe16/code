@@ -1,10 +1,9 @@
-# Profile preparation
+# Future repository preparation
 
-`README.md` is prepared for the special `calpe16/calpe16` repository. It has not been published there. Add the two project links after public destinations are authorized and verified. Current private project links remain available inside the portfolio root.
+The existing `calpe16/code` repository remains private. Separate local packages are prepared for:
 
-Suggested descriptions for future standalone repositories:
+- `quantitative-trading-research`: Deterministic backtesting, execution-cost experiments and simulated order reconciliation in Python.
+- `brujula-finance-app`: Flutter/Dart personal finance and productivity case study with import review and synchronization demos.
+- `calpe16/calpe16`: The profile README in this folder, with project links to be inserted after authorized public destinations are verified.
 
-- **Brújula:** Flutter/Dart personal management app with financial import review and a reproducible synchronization demo.
-- **Financial research:** Python financial research and order reconciliation examples, with transaction costs, entry identity and automated tests.
-
-Keep the existing rights-reserved notices. Public publication would allow the visible content to be read and copied; rights notices do not make source code secret.
+No new remote repository has been created or made public. Keep the rights-reserved notices and third-party attributions. Public viewing would allow visible source to be read and copied; rights notices do not make it secret.

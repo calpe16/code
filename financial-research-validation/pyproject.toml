@@ -3,7 +3,11 @@ name = "financial-research-validation"
 version = "1.0.0"
 description = "Selected metrics and synthetic validation examples from a private research project"
 requires-python = ">=3.12,<3.13"
-dependencies = ["pandas>=2.2,<3", "numpy>=2.2,<2.4"]
+dependencies = [
+    "pandas>=2.2,<3",
+    "numpy>=2.2,<2.4",
+    "matplotlib>=3.10,<4",
+]
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.11,<1"]

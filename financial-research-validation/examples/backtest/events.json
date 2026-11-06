@@ -1,0 +1,442 @@
+{
+  "base/benchmark": [
+    {
+      "cash": "2003.61124372",
+      "event": "fill",
+      "order_id": "buy_hold-base-precommitted",
+      "quantity": 76,
+      "side": "buy",
+      "time": "2024-01-01T00:00:00+00:00"
+    }
+  ],
+  "base/strategy": [
+    {
+      "available_bars": 30,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-01-30T08:00:00+00:00"
+    },
+    {
+      "cash": "2011.099473964",
+      "event": "fill",
+      "order_id": "sma-base-order-0029",
+      "quantity": 81,
+      "side": "buy",
+      "time": "2024-01-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 55,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-02-24T08:00:00+00:00"
+    },
+    {
+      "cash": "10504.319197735",
+      "event": "fill",
+      "order_id": "sma-base-order-0054",
+      "quantity": 81,
+      "side": "sell",
+      "time": "2024-02-25T00:00:00+00:00"
+    },
+    {
+      "available_bars": 78,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-03-18T08:00:00+00:00"
+    },
+    {
+      "cash": "2131.206387562",
+      "event": "fill",
+      "order_id": "sma-base-order-0077",
+      "quantity": 83,
+      "side": "buy",
+      "time": "2024-03-19T00:00:00+00:00"
+    },
+    {
+      "available_bars": 103,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-04-12T08:00:00+00:00"
+    },
+    {
+      "cash": "11076.228717023",
+      "event": "fill",
+      "order_id": "sma-base-order-0102",
+      "quantity": 83,
+      "side": "sell",
+      "time": "2024-04-13T00:00:00+00:00"
+    },
+    {
+      "available_bars": 126,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-05-05T08:00:00+00:00"
+    },
+    {
+      "cash": "2227.423077299",
+      "event": "fill",
+      "order_id": "sma-base-order-0125",
+      "quantity": 86,
+      "side": "buy",
+      "time": "2024-05-06T00:00:00+00:00"
+    },
+    {
+      "available_bars": 151,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-05-30T08:00:00+00:00"
+    },
+    {
+      "cash": "11676.160861041",
+      "event": "fill",
+      "order_id": "sma-base-order-0150",
+      "quantity": 86,
+      "side": "sell",
+      "time": "2024-05-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 174,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-06-22T08:00:00+00:00"
+    },
+    {
+      "cash": "2425.994089041",
+      "event": "fill",
+      "order_id": "sma-base-order-0173",
+      "quantity": 88,
+      "side": "buy",
+      "time": "2024-06-23T00:00:00+00:00"
+    }
+  ],
+  "high/benchmark": [
+    {
+      "cash": "2038.5094675",
+      "event": "fill",
+      "order_id": "buy_hold-high-precommitted",
+      "quantity": 75,
+      "side": "buy",
+      "time": "2024-01-01T00:00:00+00:00"
+    }
+  ],
+  "high/strategy": [
+    {
+      "available_bars": 30,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-01-30T08:00:00+00:00"
+    },
+    {
+      "cash": "2039.4184864",
+      "event": "fill",
+      "order_id": "sma-high-order-0029",
+      "quantity": 80,
+      "side": "buy",
+      "time": "2024-01-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 55,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-02-24T08:00:00+00:00"
+    },
+    {
+      "cash": "10353.2188360",
+      "event": "fill",
+      "order_id": "sma-high-order-0054",
+      "quantity": 80,
+      "side": "sell",
+      "time": "2024-02-25T00:00:00+00:00"
+    },
+    {
+      "available_bars": 78,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-03-18T08:00:00+00:00"
+    },
+    {
+      "cash": "2109.05372623",
+      "event": "fill",
+      "order_id": "sma-high-order-0077",
+      "quantity": 81,
+      "side": "buy",
+      "time": "2024-03-19T00:00:00+00:00"
+    },
+    {
+      "available_bars": 103,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-04-12T08:00:00+00:00"
+    },
+    {
+      "cash": "10760.93634712",
+      "event": "fill",
+      "order_id": "sma-high-order-0102",
+      "quantity": 81,
+      "side": "sell",
+      "time": "2024-04-13T00:00:00+00:00"
+    },
+    {
+      "available_bars": 126,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-05-05T08:00:00+00:00"
+    },
+    {
+      "cash": "2248.51975996",
+      "event": "fill",
+      "order_id": "sma-high-order-0125",
+      "quantity": 82,
+      "side": "buy",
+      "time": "2024-05-06T00:00:00+00:00"
+    },
+    {
+      "available_bars": 151,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-05-30T08:00:00+00:00"
+    },
+    {
+      "cash": "11177.69736274",
+      "event": "fill",
+      "order_id": "sma-high-order-0150",
+      "quantity": 82,
+      "side": "sell",
+      "time": "2024-05-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 174,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-06-22T08:00:00+00:00"
+    },
+    {
+      "cash": "2269.31214274",
+      "event": "fill",
+      "order_id": "sma-high-order-0173",
+      "quantity": 84,
+      "side": "buy",
+      "time": "2024-06-23T00:00:00+00:00"
+    }
+  ],
+  "stress/benchmark": [
+    {
+      "cash": "2081.99327875",
+      "event": "fill",
+      "order_id": "buy_hold-stress-precommitted",
+      "quantity": 75,
+      "side": "buy",
+      "time": "2024-01-01T00:00:00+00:00"
+    }
+  ],
+  "stress/strategy": [
+    {
+      "available_bars": 30,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-01-30T08:00:00+00:00"
+    },
+    {
+      "cash": "2082.8973328",
+      "event": "fill",
+      "order_id": "sma-stress-order-0029",
+      "quantity": 80,
+      "side": "buy",
+      "time": "2024-01-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 55,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-02-24T08:00:00+00:00"
+    },
+    {
+      "cash": "10442.7459220",
+      "event": "fill",
+      "order_id": "sma-stress-order-0054",
+      "quantity": 80,
+      "side": "sell",
+      "time": "2024-02-25T00:00:00+00:00"
+    },
+    {
+      "available_bars": 78,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-03-18T08:00:00+00:00"
+    },
+    {
+      "cash": "2142.38460787",
+      "event": "fill",
+      "order_id": "sma-stress-order-0077",
+      "quantity": 82,
+      "side": "buy",
+      "time": "2024-03-19T00:00:00+00:00"
+    },
+    {
+      "available_bars": 103,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-04-12T08:00:00+00:00"
+    },
+    {
+      "cash": "10949.59300928",
+      "event": "fill",
+      "order_id": "sma-stress-order-0102",
+      "quantity": 82,
+      "side": "sell",
+      "time": "2024-04-13T00:00:00+00:00"
+    },
+    {
+      "available_bars": 126,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-05-05T08:00:00+00:00"
+    },
+    {
+      "cash": "2277.18331844",
+      "event": "fill",
+      "order_id": "sma-stress-order-0125",
+      "quantity": 84,
+      "side": "buy",
+      "time": "2024-05-06T00:00:00+00:00"
+    },
+    {
+      "available_bars": 151,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-05-30T08:00:00+00:00"
+    },
+    {
+      "cash": "11474.80867466",
+      "event": "fill",
+      "order_id": "sma-stress-order-0150",
+      "quantity": 84,
+      "side": "sell",
+      "time": "2024-05-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 174,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-06-22T08:00:00+00:00"
+    },
+    {
+      "cash": "2298.66006716",
+      "event": "fill",
+      "order_id": "sma-stress-order-0173",
+      "quantity": 87,
+      "side": "buy",
+      "time": "2024-06-23T00:00:00+00:00"
+    }
+  ],
+  "zero/benchmark": [
+    {
+      "cash": "2012.40",
+      "event": "fill",
+      "order_id": "buy_hold-zero-precommitted",
+      "quantity": 76,
+      "side": "buy",
+      "time": "2024-01-01T00:00:00+00:00"
+    }
+  ],
+  "zero/strategy": [
+    {
+      "available_bars": 30,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-01-30T08:00:00+00:00"
+    },
+    {
+      "cash": "2019.88",
+      "event": "fill",
+      "order_id": "sma-zero-order-0029",
+      "quantity": 81,
+      "side": "buy",
+      "time": "2024-01-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 55,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-02-24T08:00:00+00:00"
+    },
+    {
+      "cash": "10522.45",
+      "event": "fill",
+      "order_id": "sma-zero-order-0054",
+      "quantity": 81,
+      "side": "sell",
+      "time": "2024-02-25T00:00:00+00:00"
+    },
+    {
+      "available_bars": 78,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-03-18T08:00:00+00:00"
+    },
+    {
+      "cash": "2158.54",
+      "event": "fill",
+      "order_id": "sma-zero-order-0077",
+      "quantity": 83,
+      "side": "buy",
+      "time": "2024-03-19T00:00:00+00:00"
+    },
+    {
+      "available_bars": 103,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-04-12T08:00:00+00:00"
+    },
+    {
+      "cash": "11113.41",
+      "event": "fill",
+      "order_id": "sma-zero-order-0102",
+      "quantity": 83,
+      "side": "sell",
+      "time": "2024-04-13T00:00:00+00:00"
+    },
+    {
+      "available_bars": 126,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-05-05T08:00:00+00:00"
+    },
+    {
+      "cash": "2274.33",
+      "event": "fill",
+      "order_id": "sma-zero-order-0125",
+      "quantity": 86,
+      "side": "buy",
+      "time": "2024-05-06T00:00:00+00:00"
+    },
+    {
+      "available_bars": 151,
+      "event": "signal",
+      "side": "sell",
+      "time": "2024-05-30T08:00:00+00:00"
+    },
+    {
+      "cash": "11733.47",
+      "event": "fill",
+      "order_id": "sma-zero-order-0150",
+      "quantity": 86,
+      "side": "sell",
+      "time": "2024-05-31T00:00:00+00:00"
+    },
+    {
+      "available_bars": 174,
+      "event": "signal",
+      "side": "buy",
+      "time": "2024-06-22T08:00:00+00:00"
+    },
+    {
+      "cash": "2388.47",
+      "event": "fill",
+      "order_id": "sma-zero-order-0173",
+      "quantity": 89,
+      "side": "buy",
+      "time": "2024-06-23T00:00:00+00:00"
+    }
+  ]
+}
