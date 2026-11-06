@@ -1,0 +1,16 @@
+name: Financial data checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.13.5'
+      - run: dart pub get --enforce-lockfile
+      - run: dart analyze
+      - run: dart test
+      - run: dart run bin/demo.dart

@@ -1,0 +1,31 @@
+{
+  "data": "SYNTHETIC - not investment performance",
+  "daily_returns": [
+    0.10000000000000009,
+    -0.09999999999999998,
+    0.10000000000000009,
+    -0.08172635445362719
+  ],
+  "max_drawdown": 0.09999999999999998,
+  "train_rows": 3,
+  "test_rows": 2,
+  "cost_scenarios": [
+    {
+      "scenario": "base",
+      "gross_quote": "100",
+      "fees_quote": "10",
+      "slippage_quote": "5",
+      "fx_quote_eur": "0.90",
+      "net_eur": "76.50"
+    },
+    {
+      "scenario": "higher costs",
+      "gross_quote": "100",
+      "fees_quote": "10",
+      "slippage_quote": "110",
+      "fx_quote_eur": "0.90",
+      "net_eur": "-18.00"
+    }
+  ],
+  "conclusion": "A positive gross result is insufficient: higher assumed costs reverse its sign."
+}

@@ -1,0 +1,29 @@
+﻿{
+  "data": "SYNTHETIC - not personal bank records",
+  "rows": [
+    {
+      "description": "Groceries",
+      "amountCents": -3120,
+      "status": "fresh",
+      "reason": "Movimiento nuevo."
+    },
+    {
+      "description": "Bookshop",
+      "amountCents": -1850,
+      "status": "duplicate",
+      "reason": "Misma referencia u original y fila."
+    },
+    {
+      "description": "Coffee",
+      "amountCents": -250,
+      "status": "possible",
+      "reason": "Coinciden cuenta, fecha, concepto e importe; falta una referencia común."
+    },
+    {
+      "description": "Train",
+      "amountCents": -1600,
+      "status": "conflict",
+      "reason": "La misma referencia o fila tiene otro importe, fecha o moneda."
+    }
+  ]
+}

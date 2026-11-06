@@ -1,0 +1,3 @@
+scenario,gross_quote,fees_quote,slippage_quote,fx_quote_eur,net_eur
+base,100,10,5,0.90,76.50
+higher costs,100,10,110,0.90,-18.00

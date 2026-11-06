@@ -1,0 +1,8 @@
+name: brujula_finance_sample
+description: Selected financial data-quality logic from a private personal app.
+version: 1.0.0
+publish_to: none
+environment:
+  sdk: '>=3.8.0 <4.0.0'
+dev_dependencies:
+  test: ^1.25.15
