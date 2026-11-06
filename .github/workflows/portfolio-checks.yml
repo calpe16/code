@@ -1,0 +1,33 @@
+name: Private portfolio samples
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  dart:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: brujula-finance-case-study
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.13.5'
+      - run: dart pub get --enforce-lockfile
+      - run: dart analyze
+      - run: dart test
+      - run: dart run bin/demo.dart
+  python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: financial-research-validation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.10.9'
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run pytest -q
+      - run: uv run python demo.py
