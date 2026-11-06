@@ -1,9 +1,9 @@
-# Future repository preparation
+# Portfolio structure
 
-The existing `calpe16/code` repository remains private. Separate local packages are prepared for:
+The selected portfolio examples are hosted in `calpe16/code`. Complete applications, current trading strategies, account configuration and personal records remain private.
 
-- `quantitative-trading-research`: Deterministic backtesting, execution-cost experiments and simulated order reconciliation in Python.
-- `brujula-finance-app`: Flutter/Dart personal finance and productivity case study with import review and synchronization demos.
-- `calpe16/calpe16`: The profile README in this folder, with project links to be inserted after authorized public destinations are verified.
+The README in this folder is a prepared profile introduction. It is not an active `calpe16/calpe16` profile repository. Its project links point to the case studies in this portfolio.
 
-No new remote repository has been created or made public. Keep the rights-reserved notices and third-party attributions. Public viewing would allow visible source to be read and copied; rights notices do not make it secret.
+Optional future repositories can be named `quantitative-trading-research` and `brujula-finance-app`. Local packages have been prepared separately; no additional remote repository is required to explore or run the examples here.
+
+Rights-reserved notices and third-party attributions remain in force. Public viewing allows the visible source to be read and copied; it does not make the complete private applications available.

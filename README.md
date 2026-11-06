@@ -34,6 +34,6 @@ Flutter/Dart application for personal finance, documents and productivity. The r
 
 These projects were developed with AI-assisted tools. I defined the requirements, reviewed implementations, tested behaviour and iterated on the results. Component provenance is documented within each project.
 
-Demonstrations use synthetic data. Full applications, personal records and current trading strategies remain private. This preparation repository is private; links require access.
+Demonstrations use synthetic data. Full applications, personal records and current trading strategies remain private.
 
 [LinkedIn](https://www.linkedin.com/in/martin-calpe-blasco)

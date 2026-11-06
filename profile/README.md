@@ -7,3 +7,5 @@ My main personal project is a **Quantitative Trading Research Platform** in Pyth
 The selected examples make the reasoning inspectable through runnable experiments, source and tests. German, English and Spanish support my work across markets.
 
 [LinkedIn](https://www.linkedin.com/in/martin-calpe-blasco)
+
+Selected work: [Quantitative Trading Research](https://github.com/calpe16/code/tree/main/financial-research-validation) ? [Br?jula](https://github.com/calpe16/code/tree/main/brujula-finance-case-study).
