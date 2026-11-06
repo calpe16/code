@@ -1,24 +1,17 @@
 # Martin Calpe Blasco
 
-I work at the intersection of financial research, practical tools and the German market.
-I hold a BSc in Mathematics in Finance and Industry from TU Braunschweig and have worked
-in financial research at Rankia and leasing contract operations at Volkswagen as a student employee.
+I studied Mathematics in Finance and Industry in Germany and have worked in financial research at Rankia and leasing contract management at Volkswagen. I enjoy turning a practical question into something I can use, inspect and improve.
 
-My personal projects let me investigate a question, build with AI assistance and check the result.
-The selected samples below show selected work with fictional data. The complete applications stay private.
+## Personal projects
 
-## Selected work
+**Brújula** began as an app for my own organisation. It brings daily priorities, habits, documents and financial workflows together, with study and wellbeing tools alongside them.
 
-- [Brújula: financial data quality](https://github.com/calpe16/code/tree/main/brujula-finance-case-study)
-  — reviewing imports, duplicates and conflicting financial records.
-- [Financial research validation](https://github.com/calpe16/code/tree/main/financial-research-validation)
-  — testing costs, currencies, metrics and chronological separation.
+**Financial research and validation** is my personal Python research prototype for investigating financial hypotheses, costs, currencies and simulation assumptions, with a dashboard for operational records.
 
-I am interested in financial analysis, automation and fintech product operations.
-Based in Valencia, Spain; available for remote work from Spain or roles in Valencia.
+[Explore the project portfolio](https://github.com/calpe16/code)
 
-Spanish: native · German: C2-equivalent, educated in German · English: C1.
+Both projects were developed with AI assistance. Selected demonstrations use fictional data; the complete apps, personal records and current trading strategies remain private. The portfolio repository is currently private and these links require access. This file is a draft for a future profile README; it is not displayed as the account's public profile.
+
+I am interested in financial analysis, automation and fintech product or implementation roles, particularly where German and English are useful. Based in Valencia, Spain.
 
 [LinkedIn](https://www.linkedin.com/in/martin-calpe-blasco)
-
-These samples are currently in a private preparation repository. This profile text is a draft.
