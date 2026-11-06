@@ -1,77 +1,66 @@
 # Brújula
 
-### A personal app for organisation, productivity and finances
+Flutter/Dart application for personal management, finances, documents and daily planning.
 
-I started Brújula to organise my own life: what I needed to do, how I was spending my time and where my money was going. It was originally just for me. As those needs became connected, the app grew beyond a task list into a shared workspace for daily plans, finances, documents and wellbeing.
+I built Brújula to organise my own life, be more productive and keep my finances together. It grew from those everyday needs: reviewing a bank import, finding a document, planning the week and seeing progress without maintaining separate lists.
 
-![Brújula desktop and mobile screens with fictional data](media/product-overview.png)
+![Brújula desktop and mobile product overview](media/product-overview.png)
 
-**[Take the product tour →](docs/PRODUCT_TOUR.md)** · [See the worked examples](docs/EXAMPLES.md) · [Run the selected code](#try-the-import-review-sample)
+**[Product tour →](docs/PRODUCT_TOUR.md)** · [Technical notes](docs/TECHNICAL.md) · [Source provenance](docs/PROVENANCE.md)
 
-## What you can explore
+## How it works
 
-| A question I wanted to answer | What Brújula brings together |
-|---|---|
-| What matters today? | A daily overview, priorities, tasks, habits and a calendar workspace. |
-| Where is my money going? | Transaction review, budgets, refunds, transfers and investment views. |
-| Am I making progress? | Savings goals, habit consistency and academic assessment tracking. |
-| Where did this information come from? | Document records, extracted facts and links back to their source. |
-| How do I plan the week? | Meals, recipes, pantry stock, shopping needs and personal wellbeing records. |
-| What happens when a change cannot sync? | A local working copy, pending changes, version checks and explicit conflict handling. |
+The full app uses Flutter/Dart, local working records and a Google Apps Script backend. Financial records, documents, habits and plans share the same workspace. The gallery also covers study tracking, meals, pantry stock and wellbeing.
 
-### Finance with context
+This folder contains two executable modules:
 
-The financial workspace separates spending from transfers and investments. It keeps records that still need classification visible and excludes an asset with an unknown value from a misleading gain calculation.
+- **Import review:** parse monetary values, compare incoming financial rows with their originals and classify each as new, duplicate, possible match or conflict.
+- **Synchronization:** model two devices editing one record, retain local changes on conflict, retry an operation after a lost response and resolve against the latest version.
 
-![Investment workspace showing known gains and an unpriced fictional asset](media/investments-desktop.png)
+## Key design decisions
 
-### A useful daily routine
+### Preserve the meaning of a transaction
 
-Tasks and habits share the same workspace. Weekly consistency shows the pattern behind a single day; planning a task or a workout is kept distinct from completing it.
+Two €2.50 coffees can both be real. Matching descriptions and amounts trigger review; a common reference or source-file row provides stronger identity. Repeated references and multiple strong candidates remain explicit conflicts, rather than selecting a convenient match.
 
-![Habit tracking, priorities and consistency with invented records](media/habits-desktop.png)
+The parser validates signs and grouping before converting to integer cents. `-1.234,56 EUR` becomes `-123456`; `12-3` is rejected. Currency remains explicit.
 
-### Planning beyond money
+![Investment screen separating priced holdings from an asset awaiting valuation](media/investments-desktop.png)
 
-The meal planner uses recipes and pantry stock to build shopping needs. Document and study workspaces make information easier to find and review. The [full tour](docs/PRODUCT_TOUR.md) includes these screens, wellbeing and mobile layouts.
+*Synthetic demo data. The two priced holdings show a combined €180 gain; the unpriced holding stays separate.*
 
-![Meal planning and shopping needs with fictional recipes](media/meals-desktop.png)
+### Keep a pending edit until it is confirmed
 
-## What I worked on
+The synchronization demo starts both devices at version 1. Device A's accepted edit creates version 2. Device B keeps its local edit when the server detects a conflict. Choosing to keep it creates a new operation based on version 2. Replaying A's original operation after a lost response does not write it twice.
 
-I defined the workflows and the details I wanted the app to get right, developed and revised it with AI assistance, and worked through debugging and validation. The application uses Flutter/Dart with a Google Apps Script backend. This portfolio exposes a small part of the financial review logic, accompanied by real application renders with newly invented data.
+![Two-device synchronization sequence](media/sync-sequence.svg)
 
-The selected sample has **12 automated tests**. A separate local widget test rendered the 15 new gallery views without reported widget exceptions. These are checks of selected behaviours, rather than a test of every feature or an assessment of individual programming proficiency.
+*Sequence of the standalone demo, based on the app's version and receipt workflow.*
 
-## Try the import review sample
+## Demo
 
-The runnable code demonstrates four outcomes: **new record, duplicate, possible match and conflict**. Two identical purchases can still be legitimate; a reference reused with a different amount deserves investigation.
-
-With Dart 3.13 or newer:
+Requires Dart **3.13.5**. Run from this folder:
 
 ```sh
 dart pub get --enforce-lockfile
-dart analyze
-dart test
 dart run bin/demo.dart
+dart run bin/sync_demo.dart
 ```
 
-This sample needs no bank connection or Flutter installation. See [the examples](docs/EXAMPLES.md), [test cases](test/finance_review_test.dart) and [source provenance](docs/PROVENANCE.md).
+The import demo prints the four review outcomes. The sync demo ends at version 3 with no pending changes. Both use synthetic data and run locally after dependencies are installed.
 
-<details><summary>Architecture, demonstrations and scope</summary>
+## Tests
 
-- [Architecture and synchronization decisions](docs/ARCHITECTURE.md)
-- [Financial case study](docs/CASE_STUDY.md)
-- [Complete gallery and capture method](media/APP_SCREENSHOTS.md)
-- [Illustrated import walkthrough](media/WALKTHROUGH.md)
-- [Capabilities and evidence boundaries](docs/CAPABILITIES.md)
+```sh
+dart format --output=none --set-exit-if-changed lib bin test
+dart analyze
+dart test
+```
 
-All gallery data was invented for this portfolio. The screens are rendered from the app's widgets, not design mockups. The wider app contains external integration code; this demonstration does not connect to Google, a bank or a broker. Full application source and personal records remain private.
-
-</details>
+Tests cover malformed amounts, repeated purchases, reference collisions, file reimports, deterministic matching, version conflicts, restart snapshots and idempotent retries. The full Flutter application and connected Google services remain outside these modules.
 
 ## En español
 
-Brújula nació para organizarme mejor, ser más productivo y tener mis finanzas en un mismo sitio. La galería muestra la amplitud real de la app con datos inventados; los ejemplos y el código seleccionado permiten revisar decisiones concretas sobre importaciones, duplicados y trazabilidad.
+Brújula nació para organizarme mejor y reunir mis finanzas. El recorrido muestra la aplicación real con datos ficticios. Las dos muestras permiten ejecutar la revisión de importaciones y un conflicto de sincronización entre dispositivos.
 
-Copyright 2026 Martin Calpe Blasco. All rights reserved. [Rights](RIGHTS.md) · [Third-party notices](THIRD_PARTY_NOTICES.md).
+[Rights](RIGHTS.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)

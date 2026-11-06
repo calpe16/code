@@ -1,13 +1,11 @@
-# Source and adaptations
+# Source provenance
 
-Selected on 6 November 2026 from my private personal research project.
-`completed_trades` and `daily_returns` were extracted from `src/trading/metrics.py`.
-Only pandas is needed by those two selections. Formatting may differ from the private file.
+| Source in the private project | Portfolio component | Revision |
+|---|---|---|
+| `src/trading/metrics.py` | `completed_trades`, `daily_returns` | Adapted to validate input, support explicit entry identities and expose missing-day/anchor policies. |
+| `src/trading/oms.py` | Order-state and reconciliation design | New standalone model in `research_sample/execution.py`; retains uncertainty, fill identity, position checks and protection gates as explicit examples. |
+| `src/trading/runtime.py`, `src/trading/storage.py` | Restart and audit workflow | Replaced by local JSON snapshots and an event list for the demo. |
 
-`validation.py`, `demo.py`, synthetic fixtures and tests are newly prepared portfolio adapters
-and demonstrations. They are labelled separately so that a clean demonstration is not mistaken
-for validation of the full private system. Both the project and this presentation were developed
-with AI assistance under my direction and review.
+The execution module is newly implemented for this portfolio, not a literal engine extraction. It has one fictional long order and caller-supplied observations. It contains no strategy signals, current risk parameters or account connector. `validation.py`, tests and fixtures are also portfolio helpers.
 
-No trading signal, current strategy parameter, execution connector, proprietary market dataset,
-account identifier or private operational log is included.
+The five dashboard captures use the actual Streamlit dashboard with an isolated fictional SQLite ledger and reports. A visible fixture label was added to a task-local copy of the dashboard; the original application was left unchanged. The cover arranges cropped real dashboard panels, the lifecycle diagram explains the new model, and the numerical chart plots the fixed synthetic example.

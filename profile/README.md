@@ -1,17 +1,12 @@
 # Martin Calpe Blasco
 
-I studied Mathematics in Finance and Industry in Germany and have worked in financial research at Rankia and leasing contract management at Volkswagen. I enjoy turning a practical question into something I can use, inspect and improve.
+Financial research and market operations professional based in Valencia, Spain. BSc in Mathematics in Finance and Industry from Technische Universität Braunschweig, with experience in Germany and Spain at Volkswagen and Rankia.
 
-## Personal projects
+My projects combine financial questions with practical software:
 
-**Brújula** began as an app for my own organisation. It brings daily priorities, habits, documents and financial workflows together, with study and wellbeing tools alongside them.
+- **Brújula:** Flutter/Dart app for personal management and financial workflows, with import review and synchronization examples.
+- **Financial research platform:** Python research, backtesting, transaction costs and simulated order reconciliation.
 
-**Financial research and validation** is my personal Python research prototype for investigating financial hypotheses, costs, currencies and simulation assumptions, with a dashboard for operational records.
-
-[Explore the project portfolio](https://github.com/calpe16/code)
-
-Both projects were developed with AI assistance. Selected demonstrations use fictional data; the complete apps, personal records and current trading strategies remain private. The portfolio repository is currently private and these links require access. This file is a draft for a future profile README; it is not displayed as the account's public profile.
-
-I am interested in financial analysis, automation and fintech product or implementation roles, particularly where German and English are useful. Based in Valencia, Spain.
+I use Python and Flutter/Dart in personal projects, alongside JavaScript/Google Apps Script and Git. German, English and Spanish support my work across markets.
 
 [LinkedIn](https://www.linkedin.com/in/martin-calpe-blasco)

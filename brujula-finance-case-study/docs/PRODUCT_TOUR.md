@@ -1,8 +1,8 @@
 # A tour of Brújula
 
-[Back to the project](../README.md) · [Worked examples](EXAMPLES.md)
+[Back to the project](../README.md) · [Technical notes](TECHNICAL.md)
 
-These are **real local renders of the existing Flutter widgets**, using a new in-memory fixture created solely for the portfolio. Every name, amount, document and wellbeing record is fictional. The interface is in Spanish; the captions explain what to look for. Most module captures isolate the original page widget inside a labelled capture frame; the home capture uses the full app shell.
+**Synthetic demo data.** These are local renders of the app’s Flutter widgets with a new in-memory fixture. The interface is in Spanish; the captions explain what to look for. Most module captures isolate the original page widget inside a labelled capture frame; the home capture uses the full app shell.
 
 ## Start with today
 
@@ -66,7 +66,7 @@ The fictional pantry contains rice measured in grams and tomatoes measured in pi
 
 ## Separate a plan from completion
 
-A planned mobility session remains uncompleted. Scheduling a session does not establish that it took place.
+A planned mobility session remains marked as uncompleted.
 
 ![Separate a plan from completion — real Brújula screen with fictional data](../media/training-desktop.png)
 
@@ -81,7 +81,3 @@ Two fictional food entries total 1,100 kcal. A separate manual total remains ava
 The real financial, habit and food-diary widgets were also rendered at a 430-pixel phone width. These are viewport renders, not photographs or tests on a physical phone.
 
 <p><img src="../media/finance-mobile.png" alt="Financial overview at phone width" width="30%"> <img src="../media/habits-mobile.png" alt="Habits at phone width" width="30%"> <img src="../media/food-diary-mobile.png" alt="Food diary at phone width" width="30%"></p>
-
-## What the pictures do not establish
-
-No personal account, live bank import, connected broker, Google sync, document OCR or clinical service was used. [The capability map](CAPABILITIES.md) separates the rendered views, runnable extraction and wider integration code. The complete application remains outside this sample.

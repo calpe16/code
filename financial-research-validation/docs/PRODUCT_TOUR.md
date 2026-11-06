@@ -2,7 +2,7 @@
 
 [Back to the project](../README.md) · [Worked calculations](../examples/REPORT.md)
 
-These are captures of the **actual Streamlit dashboard**, using a new SQLite fixture populated with invented orders, fills, status and reports. A visible portfolio warning was added to a task-local copy. No operational account, market feed or broker was connected. The application remains in Spanish; the captions explain the workflow.
+**Synthetic demo data.** These captures use the actual Streamlit dashboard with an isolated SQLite fixture. A visible portfolio warning was added to a task-local copy. The fixture runs offline. The application remains in Spanish; the captions explain the workflow.
 
 ## Positions, orders and fills
 
@@ -30,7 +30,7 @@ The dashboard describes controls as queued requests. A separate confirmation is 
 
 ## See the request acknowledged
 
-The pause request was submitted only to the isolated synthetic ledger and the UI acknowledged it. This demonstrates request submission and acknowledgement, not the stopping of an actual trading engine.
+The pause request was submitted only to the isolated synthetic ledger and the UI acknowledged it. The disconnected engine leaves the request queued.
 
 ![See the request acknowledged — actual dashboard with fictional data](../media/dashboard-pause-requested.png)
 

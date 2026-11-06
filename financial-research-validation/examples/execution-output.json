@@ -1,0 +1,55 @@
+{
+  "data": "Synthetic demo data",
+  "unprotected_halts": [
+    "protection_unconfirmed"
+  ],
+  "final_state": "FILLED",
+  "position": "10",
+  "entry_cost": "208.00",
+  "new_entries_allowed": true,
+  "audit": [
+    {
+      "event": "submission_started",
+      "state": "SENDING",
+      "client_id": "DEMO-ORDER"
+    },
+    {
+      "event": "response_uncertain",
+      "state": "UNKNOWN",
+      "action": "Query the existing identity before retrying"
+    },
+    {
+      "event": "fill_recorded",
+      "state": "UNKNOWN",
+      "fill_id": "DEMO-FILL-1",
+      "filled": "3"
+    },
+    {
+      "event": "duplicate_fill_ignored",
+      "state": "UNKNOWN",
+      "fill_id": "DEMO-FILL-1"
+    },
+    {
+      "event": "reconciliation",
+      "state": "PARTIAL",
+      "issues": [
+        "protection_unconfirmed"
+      ],
+      "position": "3",
+      "stop_quantity": "0"
+    },
+    {
+      "event": "fill_recorded",
+      "state": "FILLED",
+      "fill_id": "DEMO-FILL-2",
+      "filled": "10"
+    },
+    {
+      "event": "reconciliation",
+      "state": "FILLED",
+      "issues": [],
+      "position": "10",
+      "stop_quantity": "10"
+    }
+  ]
+}

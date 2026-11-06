@@ -1,67 +1,56 @@
-# Financial research and validation
+# Financial research platform
 
-### From an attractive result to a result I can question
+Python platform for backtesting, transaction costs, portfolio risk and simulated order reconciliation.
 
-This is my personal research project for exploring financial hypotheses and the assumptions behind them. It brings together simulation, costs, currencies, portfolio metrics and operational records. I use it to investigate why a result changes, including when a promising idea should be set aside.
+The project explores financial hypotheses and follows their consequences through simulation and accounting. It compares portfolio variants with passive references, records research decisions and keeps order and position records available for inspection.
 
-![Synthetic cost sensitivity and drawdown calculations](media/research-overview.png)
+![Actual dashboard panels showing positions, order states and fills](media/product-overview.png)
 
-**[Explore the dashboard →](docs/PRODUCT_TOUR.md)** · [Check the calculations](examples/REPORT.md) · [Run the selected sample](#reproduce-the-sample)
+**[Dashboard tour →](docs/PRODUCT_TOUR.md)** · [Methodology](docs/METHODOLOGY.md) · [Source provenance](docs/PROVENANCE.md)
 
-## Two parts of the same problem
+## How it works
 
-| Research | Operational visibility |
-|---|---|
-| Compare outcomes after costs and currency conversion. | Inspect positions, orders and individual fills. |
-| Measure losses from initial capital and previous peaks. | Make uncertain order responses visible. |
-| Keep development and reserved evaluation periods separate. | Review reconciliation, status and audit records. |
-| Record a hypothesis that was not promoted. | Distinguish a queued control request from an executed action. |
+The wider platform uses Python, pandas, simulation tools and transactional storage. This folder provides two smaller runnable examples: an order lifecycle model and numerical validation. Both run with synthetic demo data.
 
-The wider platform also has portfolio-research reports, passive comparisons and historical cycle diagnostics. [The research workflow](docs/RESEARCH_WORKFLOW.md) explains these capabilities without disclosing the current strategy.
+### An uncertain response is a state to reconcile
 
-The gallery below runs the actual Streamlit dashboard against a new isolated fictional ledger. It has **no broker connection**. The stale-heartbeat warning is deliberately visible: a stopped engine must not look operational.
+The execution demo persists an order identity before submission. A timeout changes it to `UNKNOWN`; it is not submitted again under another identity. Partial fills are recorded once by fill ID. New entries remain blocked while the response is unresolved, the position differs from the ledger or protective stop coverage is unconfirmed.
 
-![Actual positions and orders dashboard with synthetic records and offline warnings](media/dashboard-positions.png)
+![Simulated order lifecycle and reconciliation](media/order-lifecycle.svg)
 
-## A result you can verify by hand
+The final reconciliation matches ten units, two fills and a confirmed stop covering the position. A simulated restart requires a fresh reconciliation before opening the entry gate. [The tests](tests/test_execution.py) also cover overfills, duplicate fill conflicts, cancellation races and missing protection.
 
-The base example starts with 100 quote-currency units of gross profit. After fees of 10 and slippage of 5, conversion at 0.90 EUR per quote unit leaves **€76.50**. Raising slippage to 110 changes the same example to **−€18.00**. These are fixed fictional scenarios, not trading returns.
+### Keep the financial conventions explicit
 
-The sample also checks partial exits, daily boundaries, drawdown and a chronological split. The [worked report](examples/REPORT.md) sets out the conventions and expected answers.
+Cost assumptions can reverse a conclusion: `(100 − 10 − 5) × 0.90 = €76.50`, while higher slippage changes it to `−€18.00`. Daily-return checks identify missing observations and use UTC closing boundaries. Partial exits with different entry IDs remain separate even when venue, symbol and entry time match.
 
-## What I worked on
+![Synthetic cost and drawdown calculations](media/research-overview.png)
 
-I define the research questions and constraints, develop and revise the project with AI assistance, and review its outputs, assumptions and tests. The wider private project uses Python, pandas, transactional storage and simulation tools. This repository contains two extracted metric functions and new synthetic validation helpers, with **11 automated tests**.
+[Worked calculations](examples/REPORT.md) explain the figures and conventions. They are software examples rather than market performance.
 
-One documented global allocation hypothesis was not promoted because it lagged the passive reference over the examined full sample. [The methodology note](docs/METHODOLOGY.md) explains the decision and what cannot be independently reproduced from this sample.
+## Demo
 
-## Reproduce the sample
-
-With Python 3.12 and uv:
+Requires Python **3.12.13** and uv **0.10.9**. From this folder:
 
 ```sh
 uv sync --frozen
-uv run ruff check .
-uv run pytest -q
 uv run python demo.py
+uv run python execution_demo.py
 ```
 
-The fixed examples require no market-data subscription, broker account, API key or private file. Dependencies are installed first; the sample itself runs locally.
+The numerical demo writes fixed fixtures and results to `examples/`. The execution demo prints its event history and ends in `FILLED`, with ten units reconciled and €208 entry cost. All order and stop observations are supplied locally; there is no broker connector in the demo.
 
-<details><summary>What is included and what remains private</summary>
+## Tests
 
-- [Five actual dashboard captures and their interpretation](docs/PRODUCT_TOUR.md)
-- [Methodology and rejected research direction](docs/METHODOLOGY.md)
-- [Source provenance](docs/PROVENANCE.md)
-- [Selected tests](tests/test_validation.py)
-- [Research and operational evidence map](docs/CAPABILITIES.md)
+```sh
+uv run ruff check .
+uv run pytest -q
+```
 
-Current strategies, entry and exit rules, parameters, account configuration and operational connectors are outside this repository. Sustainable live profitability has not been demonstrated; prospective observation and operational acceptance remain incomplete. The gallery verifies presentation against a synthetic fixture, not safe execution with real money.
-
-</details>
+Tests cover entry identity, partial exits, chronological data checks, costs, drawdown, uncertain responses and reconciliation failures. [Methodology](docs/METHODOLOGY.md) also records a research direction that was not promoted. Current strategy rules, parameters and account configuration remain private. Sustainable live profitability and operational acceptance remain unestablished.
 
 ## En español
 
-Plataforma personal para investigar hipótesis financieras y revisar sus supuestos. La galería enseña las pantallas reales de posiciones, conciliación, informes y controles con datos ficticios. La muestra reproducible permite comprobar costes, divisas y métricas sin compartir estrategias ni presentar rentabilidades como reclamo.
+Plataforma personal de investigación, backtesting y control de operaciones. La muestra permite seguir una orden ficticia, revisar ejecuciones parciales y comprobar por qué una entrada queda bloqueada hasta conciliar posiciones y protección. Incluye también cálculos reproducibles de costes y métricas.
 
-Copyright 2026 Martin Calpe Blasco. All rights reserved. [Rights](RIGHTS.md) · [Third-party notices](THIRD_PARTY_NOTICES.md).
+[Rights](RIGHTS.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)

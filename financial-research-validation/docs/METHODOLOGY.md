@@ -1,38 +1,35 @@
-# Research decisions and limits
+# Methodology
 
-## Separate the question from the attractive chart
+[Back to the project](../README.md)
 
-The private project compares hypotheses against costs and passive references, records failed
-variants, and separates development from reserved evaluation. A profitable backtest is not
-proof of a repeatable advantage. Data gaps, selection over many variants, FX and the difference
-between simulated and actual fills all affect the conclusion.
+## Research workflow
 
-## A rejected research direction
+The wider platform compares hypotheses with passive references, records unsuccessful variants and separates development from reserved evaluation. It includes continuous historical portfolio paths and rising/falling/sideways period diagnostics. Those period labels describe history; they are not predictive signals.
 
-One global asset-allocation hypothesis improved a particular falling-market period but lagged
-the global passive reference over the examined full sample. Lowering assumed costs did not
-resolve that comparison, so it was not promoted. This is a documented private research outcome,
-not an independently reproduced public experiment. The data and complete selection logic are
-not redistributed here. The public synthetic cost example illustrates a separate validation principle.
+One global allocation hypothesis improved a particular falling-market interval but lagged the passive reference over the examined full sample. Lowering assumed costs did not resolve the comparison, so it was not promoted. This decision is documented in the private project; the complete market dataset and selection process remain private. Data gaps, variant selection, costs, FX and actual fills all affect interpretation. Sustainable live advantage, prospective observation and operational acceptance remain unestablished.
 
-## Conventions in the public sample
+## Daily returns
 
-- `daily_returns` is extracted from the project. Observations are equity at the close of the
-  represented interval in UTC; a point at midnight belongs to the day just completed.
-  An initial midnight anchor is excluded from the daily-return count. Missing days are forward-filled;
-  the function is not a market-data-quality validator. The demo deliberately has no missing days.
-- `completed_trades` aggregates partial exits by venue, symbol and entry timestamp. It assumes
-  there is not more than one independent entry with that identity; open residuals are excluded.
-- Cost/FX arithmetic uses Decimal. A single fixed FX rate is used for each illustrative scenario;
-  it does not model a multicurrency cash ledger or intraday conversions.
-- The drawdown helper measures against both the initial capital and subsequent peaks. The
-  chronological helper excludes the cutoff from training and includes it in test.
+`daily_returns` accepts finite nonnegative equity and positive initial capital, with unique timestamps in ascending order. Missing or duplicate observations fail explicitly. Each timestamp is an interval close in UTC: a close at midnight belongs to the previous day. Irregular intraday observations use the last close within the day.
 
-The last two helpers are new portfolio adapters inspired by the private project, not verbatim
-production functions. No Sharpe ratio, annualized synthetic return or statistical significance is claimed.
+The default anchor convention removes a first midnight observation equal to initial capital. `initial_anchor=False` retains such an observation when it is an actual first close; `True` explicitly marks an anchor. A lone anchor yields no return. Empty input yields an empty series after capital validation.
 
-## Current boundary
+To preserve the earlier convention, missing calendar days carry the last close by default, producing zero return on those days. The resulting Series lists them in `attrs['carried_days']`. Use `missing_days='raise'` to require daily coverage. Carrying is a stated assumption, not an observed unchanged market value. A total loss can yield −100%; a subsequent percentage return from zero equity is undefined and rejected.
 
-The private project's sustainable live advantage has not been demonstrated. Native operational
-acceptance and prospective observation remain incomplete. This sample does not connect to it,
-activate it, expose current strategy parameters or certify the safety of real-money execution.
+## Partial exits and identity
+
+`completed_trades` uses `entry_id` when supplied, or an explicit `identity_column`. Partial exits for one entry are summed; independent entries at the same timestamp stay separate. Open residuals exclude only the matching entry identity. Entry/exit timestamps and financial amounts are validated.
+
+Older project records without an entry ID retain grouping by venue, symbol and entry time for compatibility. Two independent entries with exactly that legacy identity cannot be distinguished from those fields alone. Supply a stable entry ID rather than guessing. In identity mode, open positions must carry the same ID.
+
+## Costs, drawdown and partitions
+
+The cost example uses Decimal and one fixed FX rate per scenario. It is not a multicurrency cash ledger. Drawdown measures losses against initial capital and later peaks. The chronological helper excludes the cutoff from training and includes it in test. These small checks verify those conventions; they do not establish statistical significance or settle the evaluation of the wider strategy.
+
+## Simulated execution
+
+`execution.py` models one long entry in a fictional instrument. It records submission state before a supplied response, preserves `UNKNOWN` until reconciliation and deduplicates fills by identity and economics. Reusing a fill identity with other values or overfilling an order creates a persistent halt. A rejected order also retains a halt.
+
+Reconciliation compares the fill ledger with supplied cumulative fills and position quantity, checks the order state and requires confirmed stop coverage equal to the open position. Open/partial orders keep the entry reservation. A cancellation retains any filled position. Reconciliation issues can clear on a subsequent matching observation; persistent identity/order faults remain blocked. Restoring a snapshot requires a new reconciliation.
+
+This is a standalone model of the inspected control flow. Remote observations are function arguments; the example excludes transport, market signals, sizing policy, live stop placement and venue-specific execution. The actual dashboard tour uses an independent synthetic ledger, so its status values need not match this scenario.

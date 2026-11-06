@@ -1,0 +1,13 @@
+{
+  "data": "Synthetic demo data",
+  "retryVersion": 2,
+  "deviceBConflict": "conflict",
+  "preservedLocalEdit": "Review groceries budget",
+  "final": {
+    "version": 3,
+    "data": {
+      "title": "Review groceries budget"
+    }
+  },
+  "pending": 0
+}

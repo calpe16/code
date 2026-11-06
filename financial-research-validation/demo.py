@@ -2,6 +2,7 @@
 
 import csv
 import json
+import math
 from pathlib import Path
 
 import pandas as pd
@@ -41,7 +42,7 @@ def main():
             net_result(*(row[k] for k in ("gross_quote", "fees_quote", "slippage_quote", "fx_quote_eur")))
         )
     result = {
-        "data": "SYNTHETIC - not investment performance",
+        "data": "Synthetic demo data",
         "daily_returns": daily_returns(curve, 1000).tolist(),
         "max_drawdown": max_drawdown(curve.equity_eur.tolist(), 1000),
         "train_rows": len(train),
@@ -49,26 +50,16 @@ def main():
         "cost_scenarios": scenarios,
         "conclusion": "A positive gross result is insufficient: higher assumed costs reverse its sign.",
     }
+    if ([row["net_eur"] for row in scenarios] != ["76.50", "-18.00"]
+            or not math.isclose(result["max_drawdown"], .1)
+            or (len(train), len(test)) != (3, 2)):
+        raise RuntimeError("Synthetic calculation invariant failed")
     curve.to_csv(target / "synthetic-equity.csv", index=False)
     with (target / "cost-scenarios.csv").open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(scenarios[0]))
         writer.writeheader()
         writer.writerows(scenarios)
     (target / "results.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    body = "\n".join(
-        f"| {x['scenario']} | {x['gross_quote']} | {x['fees_quote']} | {x['slippage_quote']} | {x['fx_quote_eur']} | {x['net_eur']} |"
-        for x in scenarios
-    )
-    (target / "REPORT.md").write_text(
-        "# Synthetic validation report\n\nNo market performance is represented.\n\n"
-        "| Scenario | Gross quote | Fees | Slippage | EUR per quote | Net EUR |\n"
-        "|---|---:|---:|---:|---:|---:|\n" + body + "\n\n"
-        "Hand check: (100 - 10 - 5) × 0.90 = 76.50 EUR.\n\n"
-        "Stress: (100 - 10 - 110) × 0.90 = -18.00 EUR.\n\n"
-        "Drawdown: (1100 - 990) / 1100 = 10%. The first loss is also measured against initial capital.\n\n"
-        "Chronological split: three observations before 4 January, two from 4 January.\n",
-        encoding="utf-8",
-    )
     print(json.dumps(result, indent=2))
 
 

@@ -11,6 +11,8 @@ jobs:
         with:
           sdk: '3.13.5'
       - run: dart pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib bin test
       - run: dart analyze
       - run: dart test
       - run: dart run bin/demo.dart
+      - run: dart run bin/sync_demo.dart

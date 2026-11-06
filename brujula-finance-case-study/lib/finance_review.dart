@@ -1,52 +1,79 @@
-// Selected logic extracted from Brújula; see docs/PROVENANCE.md.
+// Adapted from Brújula; see docs/PROVENANCE.md.
 // Copyright 2026 Martin Calpe Blasco. All rights reserved.
+import 'dart:convert';
+
 typedef Json = Map<String, dynamic>;
 
+/// Accept edge signs, accounting parentheses and validated grouping.
+/// A separator followed by exactly three digits denotes thousands.
 int moneyCents(String input) {
-  var value = input
+  Never invalid() =>
+      throw const FormatException('Invalid or ambiguous amount.');
+  var text = input
       .trim()
-      .replaceAll(RegExp(r'[€$£\s\u00a0]'), '')
-      .replaceAll(RegExp('EUR|USD|GBP', caseSensitive: false), '')
-      .replaceAll('−', '-');
-  final negative =
-      value.startsWith('-') ||
-      (value.startsWith('(') && value.endsWith(')')) ||
-      value.endsWith('-');
-  value = value.replaceAll(RegExp(r'[()+-]'), '');
-  final comma = value.lastIndexOf(',');
-  final dot = value.lastIndexOf('.');
-  String whole, fraction;
+      .replaceAll('−', '-')
+      .replaceAll(RegExp(r'[\u00a0\u202f]'), ' ');
+  final accounting = text.startsWith('(') && text.endsWith(')');
+  if (accounting) text = text.substring(1, text.length - 1).trim();
+  if (text.contains('(') || text.contains(')')) invalid();
+  final first = RegExp(r'\d').firstMatch(text);
+  if (first == null) invalid();
+  final last = RegExp(r'\d').allMatches(text).last;
+  final edges = [text.substring(0, first.start), text.substring(last.end)];
+  final token = RegExp(r'EUR|USD|GBP|€|\$|£|[+-]', caseSensitive: false);
+  var signs = 0, currencies = 0;
+  var negative = accounting;
+  for (var i = 0; i < edges.length; i++) {
+    final edge = edges[i].trim();
+    var cursor = 0;
+    for (final match in token.allMatches(edge)) {
+      if (edge.substring(cursor, match.start).trim().isNotEmpty) invalid();
+      final value = match.group(0)!;
+      if (value == '-' || value == '+') {
+        if (accounting || ++signs > 1 || (i == 1 && value == '+')) invalid();
+        negative = value == '-';
+      } else if (++currencies > 1) {
+        invalid();
+      }
+      cursor = match.end;
+    }
+    if (edge.substring(cursor).trim().isNotEmpty) invalid();
+  }
+  final value = text.substring(first.start, last.end);
+  if (!RegExp(r'^[\d., ]+$').hasMatch(value)) invalid();
+  final comma = value.lastIndexOf(','), dot = value.lastIndexOf('.');
+  String whole = value, fraction = '';
+  String digits(String input, String separator) {
+    if (RegExp(r'^\d+$').hasMatch(input)) return input;
+    final escaped = RegExp.escape(separator);
+    if (!RegExp('^\\d{1,3}(?:$escaped\\d{3})+\$').hasMatch(input)) invalid();
+    return input.replaceAll(separator, '');
+  }
+
   if (comma >= 0 && dot >= 0) {
     final decimal = comma > dot ? ',' : '.';
     final parts = value.split(decimal);
-    fraction = parts.removeLast();
-    whole = parts.join().replaceAll(RegExp('[.,]'), '');
+    if (parts.length != 2 || !RegExp(r'^\d{1,2}$').hasMatch(parts.last))
+      invalid();
+    whole = digits(parts.first, decimal == ',' ? '.' : ',');
+    fraction = parts.last;
   } else if (comma >= 0 || dot >= 0) {
-    final parts = value.split(comma >= 0 ? ',' : '.');
-    if (parts.length == 2 && parts.last.length <= 2) {
-      whole = parts.first;
+    final separator = comma >= 0 ? ',' : '.';
+    final parts = value.split(separator);
+    if (parts.length == 2 && RegExp(r'^\d{1,2}$').hasMatch(parts.last)) {
+      whole = digits(parts.first, ' ');
       fraction = parts.last;
-    } else if (parts.skip(1).every((p) => p.length == 3)) {
-      whole = parts.join();
-      fraction = '';
     } else {
-      throw const FormatException('Importe ambiguo. Usa 1.234,56 o 1234.56.');
+      whole = digits(value, separator);
     }
   } else {
-    whole = value;
-    fraction = '';
+    whole = digits(value, ' ');
   }
-  if (!RegExp(r'^\d+$').hasMatch(whole) ||
-      !RegExp(r'^\d{0,2}$').hasMatch(fraction)) {
-    throw const FormatException(
-      'Introduce un importe válido, con un máximo de dos decimales.',
-    );
-  }
-  final result = int.parse(whole) * 100 + int.parse(fraction.padRight(2, '0'));
-  if (result > 9007199254740991) {
-    throw const FormatException('Importe demasiado grande.');
-  }
-  return negative ? -result : result;
+  final result =
+      BigInt.parse(whole) * BigInt.from(100) +
+      BigInt.parse(fraction.padRight(2, '0'));
+  if (result > BigInt.from(9007199254740991)) invalid();
+  return negative ? -result.toInt() : result.toInt();
 }
 
 String normalize(String value) {
@@ -79,99 +106,158 @@ class ReviewedImportRow {
 Json _original(Json t) => t['statementData'] is Map
     ? Map<String, dynamic>.from(t['statementData'])
     : t;
-
 bool _sameMoney(Json a, Json b) =>
     a['date'] == b['date'] &&
     a['amountCents'] == b['amountCents'] &&
     a['currency'] == b['currency'];
+String _ref(Json row) => '${_original(row)['reference'] ?? ''}'.trim();
+String _refKey(Json row) => jsonEncode([row['accountId'], _ref(row)]);
+void _validateRow(Json row) {
+  final source = _original(row);
+  bool present(dynamic value) => value is String && value.trim().isNotEmpty;
+  if (!present(row['id']) ||
+      !present(row['accountId']) ||
+      !present(source['date']) ||
+      !present(source['currency']) ||
+      source['amountCents'] is! int ||
+      (source['amountCents'] as int).abs() > 9007199254740991) {
+    throw const FormatException(
+      'Transaction identity, date, currency and safe integer cents required.',
+    );
+  }
+}
 
-/// A matching amount is evidence to review, never proof of a duplicate.
-/// Consume candidates one by one so repeated purchases retain their multiplicity.
+String _description(Json row) =>
+    normalize('${_original(row)['description']}')
+        .replaceAll(RegExp(r'\s+'), ' ');
+
+/// Conservative one-to-one review. Ambiguous references retain their rows.
 List<ReviewedImportRow> reviewImport(
   List<Json> incoming,
   List<Json> existing,
   String documentId,
 ) {
-  final pool = existing.where((t) => t['deleted'] != true).toList();
-  final consumed = <String>{};
-  final staged = <Json>[];
+  final pool = existing.where((t) => t['deleted'] != true).toList()
+    ..sort((a, b) => '${a['id']}'.compareTo('${b['id']}'));
+  final ids = <String>{};
+  for (final row in pool) {
+    _validateRow(row);
+    if (row['id'] is! String || !ids.add(row['id'] as String)) {
+      throw const FormatException(
+        'Existing transaction IDs must be unique strings.',
+      );
+    }
+  }
+  final referenceCounts = <String, int>{}, idCounts = <String, int>{};
+  for (final row in incoming) {
+    _validateRow(row);
+    if (row['id'] is! String)
+      throw const FormatException('Incoming transaction ID required.');
+    idCounts[row['id']] = (idCounts[row['id']] ?? 0) + 1;
+    if (_ref(row).isNotEmpty)
+      referenceCounts[_refKey(row)] = (referenceCounts[_refKey(row)] ?? 0) + 1;
+  }
+  final consumed = <String>{}, staged = <Json>[];
   final result = <ReviewedImportRow>[];
   for (var i = 0; i < incoming.length; i++) {
-    final t = incoming[i];
-    final source = _original(t);
-    final candidates = [
-      ...pool,
-      ...staged,
-    ].where((e) => e['accountId'] == t['accountId']).toList();
-    final ref = '${source['reference'] ?? ''}'.trim();
-    final strong = candidates.where(
-      (e) =>
-          (ref.isNotEmpty && _original(e)['reference'] == ref) ||
-          (e['documentId'] == documentId &&
+    final t = incoming[i], source = _original(incoming[i]);
+    final all = [...pool, ...staged];
+    final candidates = all
+        .where((e) => e['accountId'] == t['accountId'])
+        .toList();
+    void add(ImportMatch match, String reason, [Json? old]) =>
+        result.add(ReviewedImportRow(i, t, match, reason, old));
+    if (idCounts[t['id']]! > 1) {
+      add(ImportMatch.conflict, 'Repeated incoming identifier.');
+      continue;
+    }
+    final collision = all.where((e) => e['id'] == t['id']).firstOrNull;
+    if (collision != null &&
+        (collision['accountId'] != t['accountId'] ||
+            !_sameMoney(source, _original(collision)) ||
+            _ref(t) != _ref(collision))) {
+      add(
+        ImportMatch.conflict,
+        'Identifier collides with another transaction.',
+        collision,
+      );
+      continue;
+    }
+    final provenance = candidates
+        .where(
+          (e) =>
+              documentId.isNotEmpty &&
+              t['sourceRow'] != null &&
+              e['sourceRow'] != null &&
+              e['documentId'] == documentId &&
+              e['sourceRow'] == t['sourceRow'] &&
               (e['sourceTable'] ?? '') == (t['sourceTable'] ?? '') &&
-              (e['sourceComponent'] ?? '') == (t['sourceComponent'] ?? '') &&
-              e['sourceRow'] == t['sourceRow']),
-    );
-    final identified = strong.firstOrNull;
-    if (identified != null) {
-      final equal = _sameMoney(source, _original(identified));
-      result.add(
-        ReviewedImportRow(
-          i,
-          t,
-          equal ? ImportMatch.duplicate : ImportMatch.conflict,
-          equal
-              ? 'Misma referencia u original y fila.'
-              : 'La misma referencia o fila tiene otro importe, fecha o moneda.',
-          identified,
-        ),
+              (e['sourceComponent'] ?? '') == (t['sourceComponent'] ?? ''),
+        )
+        .toList();
+    final strong = provenance.isNotEmpty
+        ? provenance
+        : candidates
+              .where((e) => _ref(t).isNotEmpty && _ref(e) == _ref(t))
+              .toList();
+    if ((provenance.isEmpty && (referenceCounts[_refKey(t)] ?? 0) > 1) ||
+        strong.length > 1) {
+      add(
+        ImportMatch.conflict,
+        'Reference or source identity has multiple candidates.',
       );
-      consumed.add(identified['id']);
       continue;
     }
-    final collision = candidates.where((e) => e['id'] == t['id']).firstOrNull;
-    if (collision != null && !_sameMoney(source, _original(collision))) {
-      result.add(
-        ReviewedImportRow(
-          i,
-          t,
+    if (strong.isNotEmpty) {
+      final old = strong.single;
+      if (consumed.contains(old['id'])) {
+        add(
           ImportMatch.conflict,
-          'El identificador ya existe con otros datos financieros.',
-          collision,
-        ),
+          'This existing record already matched another incoming row.',
+          old,
+        );
+      } else {
+        consumed.add(old['id']);
+        final same = _sameMoney(source, _original(old));
+        add(
+          same ? ImportMatch.duplicate : ImportMatch.conflict,
+          same
+              ? 'Matching reference or source row.'
+              : 'Identity matches but amount, date or currency differs.',
+          old,
+        );
+      }
+      continue;
+    }
+    if (collision != null) {
+      add(
+        ImportMatch.conflict,
+        'Identifier matches without confirming source identity.',
+        collision,
       );
       continue;
     }
-    final similar = candidates.where((e) {
-      final old = _original(e);
-      // Different bank references are distinct purchases even when identical.
-      final oldRef = '${old['reference'] ?? ''}'.trim();
-      return !consumed.contains(e['id']) &&
-          !(ref.isNotEmpty && oldRef.isNotEmpty && ref != oldRef) &&
-          _sameMoney(source, old) &&
-          normalize(
-                '${source['description']}',
-              ).replaceAll(RegExp(r'\s+'), ' ') ==
-              normalize(
-                '${old['description']}',
-              ).replaceAll(RegExp(r'\s+'), ' ');
-    }).firstOrNull;
-    if (similar != null && pool.contains(similar)) {
+    final similar = pool
+        .where(
+          (e) =>
+              e['accountId'] == t['accountId'] &&
+              !consumed.contains(e['id']) &&
+              !(_ref(t).isNotEmpty &&
+                  _ref(e).isNotEmpty &&
+                  _ref(t) != _ref(e)) &&
+              _sameMoney(source, _original(e)) &&
+              _description(t) == _description(e),
+        )
+        .firstOrNull;
+    if (similar != null) {
       consumed.add(similar['id']);
-      result.add(
-        ReviewedImportRow(
-          i,
-          t,
-          ImportMatch.possible,
-          'Coinciden cuenta, fecha, concepto e importe; falta una referencia común.',
-          similar,
-        ),
+      add(
+        ImportMatch.possible,
+        'Matching account, date, description and amount; no common reference.',
+        similar,
       );
     } else {
-      result.add(
-        ReviewedImportRow(i, t, ImportMatch.fresh, 'Movimiento nuevo.'),
-      );
-      // No-reference rows inside the same statement can be separate purchases.
+      add(ImportMatch.fresh, 'New transaction.');
       staged.add({...t, 'documentId': documentId});
     }
   }

@@ -1,6 +1,6 @@
 # Synthetic validation report
 
-Every observation below is invented. The examples verify calculations, not market performance.
+Synthetic demo data.
 
 ## Costs and currency
 
@@ -21,8 +21,12 @@ Three observations fall before 4 January; two fall on or after it. The cutoff is
 
 ## Partial exits
 
-The extracted function aggregates partial exits by venue, symbol and entry timestamp. It excludes open residuals and assumes no separate independent entries share that identity. The [tests](../tests/test_validation.py) show the expected grouping and exclusions.
+The adapted function aggregates partial exits by entry ID when available and excludes the matching open residual. Legacy files without IDs retain the venue/symbol/time convention. The [tests](../tests/test_validation.py) show the expected grouping and exclusions.
 
 ![Cost sensitivity and drawdown from the invented examples](../media/research-overview.png)
 
 Run `uv run python demo.py` for the JSON output. See [results.json](results.json), [the equity fixture](synthetic-equity.csv) and [cost scenarios](cost-scenarios.csv).
+
+## Order reconciliation example
+
+`execution_demo.py` records 3 units at €20 plus €0.30 fees, then 7 at €21 plus €0.70: `3 × 20 + 0.30 + 7 × 21 + 0.70 = €208`. Replaying the first fill leaves that total unchanged. An absent protective stop blocks entries; confirmed coverage of ten units clears that reconciliation issue.

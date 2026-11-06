@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:brujula_finance_sample/finance_review.dart';
 
 Json row(String id, String description, String amount, String reference) => {
@@ -26,9 +27,13 @@ void main() {
     row('new-d', 'Train', '-16,00', 'DEMO-C'),
   ];
   final result = reviewImport(incoming, existing, 'synthetic-statement');
+  final outcomes = result.map((r) => r.match.name).join(',');
+  if (outcomes != 'fresh,duplicate,possible,conflict') {
+    throw StateError('Unexpected import review: $outcomes');
+  }
   print(
     const JsonEncoder.withIndent('  ').convert({
-      'data': 'SYNTHETIC - not personal bank records',
+      'data': 'Synthetic demo data',
       'rows': [
         for (final r in result)
           {
