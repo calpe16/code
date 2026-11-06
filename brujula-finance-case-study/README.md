@@ -23,7 +23,7 @@ The design is explained in [the architecture note](docs/ARCHITECTURE.md); that b
 
 ## Run the selected logic
 
-Install Dart 3.8 or newer (the sample was checked with 3.13.5), then run:
+Install Dart 3.13 or newer (the sample was checked with 3.13.5), then run:
 
 ```sh
 dart pub get --enforce-lockfile
